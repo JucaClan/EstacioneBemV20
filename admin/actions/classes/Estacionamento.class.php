@@ -99,13 +99,11 @@ class Estacionamento{
     }
 
     public function Editar(){
-        $sql = "UPDATE estacionamento SET placa=?, celular=?, data_entrada=?, data_saida=?, convenio=?, 
-        id_usuario=?, id_tipo=?, observacoes=? WHERE id=?";
+        $sql = "UPDATE estacionamento SET placa=?, convenio=?, id_tipo=?, observacoes=? WHERE id=?";
         $banco = Banco::conectar();
         $comando = $banco->prepare($sql);
         try{
-        $comando->execute([$this->placa, $this->celular, $this->data_entrada, $this->data_saida, $this->convenio, 
-        $this->id_usuario, $this->id_tipo, $this->observacoes, $this->id]);
+        $comando->execute([$this->placa, $this->convenio, $this->id_tipo, $this->observacoes, $this->id]);
         Banco::desconectar();
         return $comando->rowCount();
         }catch(PDOException $e){
@@ -132,6 +130,21 @@ class Estacionamento{
         $arr_resultado = $comando->fetchAll(PDO::FETCH_ASSOC);
         Banco::desconectar();
         return $arr_resultado;
+    }
+
+    public function AtualizarSaida(){
+        $sql = "UPDATE estacionamento SET data_saida=now() WHERE id=?";
+        $banco = Banco::conectar();
+        $comando = $banco->prepare($sql);
+
+        try {
+            $comando->execute([$this->id]);
+            Banco::desconectar();
+            return $comando->rowCount();
+        } catch (PDOException $e) {
+            Banco::desconectar();
+            return 0;
+        }
     }
 }
 ?>

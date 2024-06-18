@@ -24,6 +24,27 @@ class Servico{
         Banco::desconectar();
         return $comando->rowCount();
     }
+
+    public function Editar()
+    {
+        $cont = 0;
+        $sql = "UPDATE servicos SET valor=? WHERE id=1";
+        $sql2 = "UPDATE servicos SET valor=? WHERE id=2";
+        $banco = Banco::conectar();
+        $comando = $banco->prepare($sql);
+        try {
+            $comando->execute([$this->valor[0]]);
+            $cont += $comando->rowCount();
+            $comando = $banco->prepare($sql2);
+            $comando->execute([$this->valor[1]]);
+            $cont += $comando->rowCount();
+            Banco::desconectar();
+            return $cont;
+        } catch (PDOException $e) {
+            Banco::desconectar();
+            return $cont;
+        }
+    }
 }
 
 ?>
