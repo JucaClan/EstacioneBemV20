@@ -679,8 +679,8 @@ $config = $c->Listar();
                     </form>
                 </div>
 
-                <!-- CONFIGURAÇÕES -->
-                <div id="controleDeVagas" class="row justify-content-center">
+                        <!-- CONFIGURAÇÕES -->
+                        <div id="controleDeVagas" class="row justify-content-center">
                     <div class="col-md-6 container-md m-2 p-3">
                         <div class="card bg-dark text-light border-white p-4">
                             <h2 class="mt-3 negrito">Configurações<br> </h2>
@@ -692,38 +692,93 @@ $config = $c->Listar();
                                         <td><?= $listconfig['valor']; ?></td>
                                     </tr>
                                 <?php } ?>
+                                <tr class="table-dark">
+                                    <td class="negrito">Vagas Livres</td>
+                                    <td><?= $c->ListarVagasLivres()[0]["Vagas Livres"]; ?></td>
+                                </tr>
+                                <tr class="table-dark">
+                                    <td class="negrito">Vagas Ocupadas</td>
+                                    <td><?= $c->ListarVagasOcupadas()[0]["Vagas Ocupadas"]; ?></td>
+                                </tr>
                                 <button type="button" class="btn btn-primary botao border" data-bs-toggle="modal" data-bs-target="#modalVagas">
                                     Editar
                                 </button>
                             </table>
                         </div>
-                        <!-- Modal editar configuração -->
+                        <!-- Modal -->
                         <div class="modal fade" id="modalVagas" tabindex="-1" aria-labelledby="modalVagasLabel" aria-hidden="true">
                             <div class="modal-dialog">
-                                <div class="modal-content">
+                                <div class="modal-content bg-dark text-light">
                                     <div class="modal-header">
-                                        <h1 class="modal-title fs-5 text-black" id="modalVagasLabel">Editar Vagas</h1>
+                                        <h1 class="modal-title fs-5 text-light" id="modalVagasLabel">Editar Vagas</h1>
                                     </div>
-                                    <div class="modal-body">
-                                        <table class="table mt-3">
-                                            <tr>
-                                                <th scope="col">Total de vagas</th>
-                                                <td> <input type="text" id="totalvagas" name="totalvagas"> </td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">Vagas livres</th>
-                                                <td> <input type="text" id="vagaslivres" name="vagaslivres"> </td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">Vagas ocupadas</th>
-                                                <td> <input type="text" id="vagasocupadas" name="vagasocupadas"> </td>
-                                            </tr>
-                                        </table>
+                                    <form action="actions/editar_configuracao.php" method="POST">
+                                        <div class="modal-body bg-dark text-light">
+                                            <table class="table mt-3">
+                                                <tr class="bg-dark text-light">
+                                                    <th scope="row" class="bg-dark text-light">Nome do Estacionamento</th>
+                                                    <td class="bg-dark text-light"> <input value="<?= $config[0]['valor']; ?>" type="text" id="nomeestacionamento" name="nomeestacionamento"> </td>
+                                                </tr>
+                                                <tr class="bg-dark text-light">
+                                                    <th scope="col" class="bg-dark text-light">Total de vagas</th>
+                                                    <td class="bg-dark text-light"> <input value="<?= $config[1]['valor']; ?>" type="text" id="totalvagas" name="totalvagas"> </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary f5821f" data-bs-dismiss="modal">Fechar</button>
+                                            <button type="submit" class="btn btn-primary botao border">Salvar mudanças</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tabela de Preços -->
+                        <div class="card bg-dark text-light border-white p-4">
+                            <h2 class="mt-3 negrito">Tabela de Preços<br> </h2>
+                            <hr>
+                            <table class="table mt-3">
+                                <?php foreach ($listserv as $servicos) { ?>
+                                    <tr class="table-dark">
+                                        <td class="negrito"><?= $servicos['servico']; ?></td>
+                                        <td><?= $servicos['valor']; ?></td>
+                                    </tr>
+                                <?php } ?>
+                                <button type="button" class="btn btn-primary botao border" data-bs-toggle="modal" data-bs-target="#modalTabelaPrecos">
+                                    Editar
+                                </button>
+                            </table>
+                        </div>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="modalTabelaPrecos" tabindex="-1" aria-labelledby="modalTabelaPrecosLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content bg-dark text-light">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5 text-light" id="modalVagasLabel">Editar Preços</h1>
                                     </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary f5821f" data-bs-dismiss="modal">Fechar</button>
-                                        <button type="submit" class="btn btn-primary botao border">Salvar mudanças</button>
-                                    </div>
+                                    <form action="actions/editar_valor.php" method="POST">
+                                        <div class="modal-body bg-dark text-light">
+                                            <table class="table mt-3">
+                                                <tr class="bg-dark text-light">
+                                                    <td class="bg-dark text-light">Avulso</td>
+                                                    <td class="bg-dark text-light">R$<input value="<?= $listserv[0]['valor']; ?>" type="text" id="servicoavulso" name="servicoavulso"></td>
+                                                </tr>
+                                                <tr class="bg-dark text-light">
+                                                    <td class="bg-dark text-light">Mensal</td>
+                                                    <td class="bg-dark text-light">R$<input value="<?= $listserv[1]['valor']; ?>" type="text" id="servicomensal" name="servicomensal"></td>
+                                                </tr>
+                                                <tr class="bg-dark text-light">
+
+                                                </tr>
+                                            </table>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary border" data-bs-dismiss="modal">Fechar</button>
+                                            <button type="submit" class="btn btn-primary botao border">Salvar mudanças</button>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
