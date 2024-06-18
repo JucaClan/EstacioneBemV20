@@ -22,6 +22,15 @@ class Estacionamento{
         Banco::desconectar();
         return $arr_resultado;
     }
+    public function ListarId(){
+        $sql = "SELECT * FROM `estacionamento` WHERE id = ?";
+        $banco = Banco::conectar();
+        $comando = $banco->prepare($sql);
+        $comando->execute();
+        $arr_resultado = $comando->fetchAll(PDO::FETCH_ASSOC);
+        Banco::desconectar();
+        return $arr_resultado;
+    }
 
     public function ListarMensalistas(){
         $sql = "SELECT * FROM estacionamento WHERE convenio = 4";
@@ -54,7 +63,7 @@ class Estacionamento{
     }
 
     public function ListarDiaAtual(){
-        $sql = "SELECT * FROM estacionamento WHERE Month(data_entrada) = Day (CURRENT_DATE)";
+        $sql = "SELECT * FROM estacionamento WHERE Day(data_entrada) = Day (CURRENT_DATE)";
         $banco = Banco::conectar();
         $comando = $banco->prepare($sql);
         $comando->execute();
@@ -64,7 +73,7 @@ class Estacionamento{
     }
 
     public function ListarAnoAtual(){
-        $sql = "SELECT * FROM estacionamento WHERE Month(data_entrada) = year (CURRENT_DATE)";
+        $sql = "SELECT * FROM estacionamento WHERE Year(data_entrada) = year (CURRENT_DATE)";
         $banco = Banco::conectar();
         $comando = $banco->prepare($sql);
         $comando->execute();

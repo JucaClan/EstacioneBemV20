@@ -34,6 +34,9 @@ $list = $e->Listar();
 $list_mensalistas = $e->ListarMensalistas();
 $list_avulsos = $e->ListarAvulsos();
 $vagaslivres = $e->ObterVagasLivres();
+$list_mes = $e->ListarMesAtual();
+$list_dia = $e->ListarDiaAtual();
+$list_ano = $e->ListarAnoAtual();
 
 $c = new Configuracao();
 $config = $c->Listar();
@@ -276,15 +279,15 @@ $config = $c->Listar();
                                 <br>
                                 <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
                                 <label class="form-check-label" for="">
-                                    Aberto
+                                    Dia
                                 </label>
                                 <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
                                 <label class="form-check-label" for="flexRadioDefault1">
-                                    Cancelado
+                                    Mês
                                 </label>
                                 <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
                                 <label class="form-check-label" for="flexRadioDefault1">
-                                    Fechado
+                                    Ano
                                 </label>
                             </p>
 
@@ -323,21 +326,24 @@ $config = $c->Listar();
                             <h2 class="mb-4 fw-bolder">Histórico Movimentações</h2>
                             <p class="mb-4 fs-6 opacity-75 "><span class="fw-bolder">Período</span>
                                 <br>
-                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="todos" onclick="Listar('todos')" >
+                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="todos" onclick="Listar('todos')">
                                 <label class="form-check-label" for="">
                                     Todos
                                 </label>
-                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" onclick="Listar()">
-                                <label class="form-check-label" for="flexRadioDefault1">
+                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="dia" onclick="Listar('dia')">
+                                <label class="form-check-label" for="">
                                     Dia
                                 </label>
-                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" onclick="Listar()">
-                                <label class="form-check-label" for="flexRadioDefault1">
+                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="mes" onclick="Listar('mes')">
+                                <label class="form-check-label" for="">
                                     Mês
                                 </label>
+                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="ano" onclick="Listar('ano')">
+                                <label class="form-check-label" for="">
+                                    Ano
+                                </label>
                             </p>
-
-
+                            <!-- Listar Todos -->
                             <table class="table" id="ListarTodos">
                                 <thead>
                                     <tr class="table-dark">
@@ -349,44 +355,154 @@ $config = $c->Listar();
                                         <th scope="col">Total</th>
                                     </tr>
                                 </thead>
-                              
-                                <tbody >
-                                    
+
+                                <tbody>
                                     <?php foreach ($list as $mens) { ?>
-                                    <tr class="table-dark">
-                                    <th scope="row"><?= $mens['id'];?></th>
-                                    <td><?= $mens['placa'];?></td>
-                                    <td><?= $mens['convenio'];?></td>
+                                        <tr class="table-dark">
+                                            <th scope="row"><?= $mens['id']; ?></th>
+                                            <td><?= $mens['placa']; ?></td>
+                                            <td><?= $mens['convenio']; ?></td>
 
-                                    
-                                    <td><?= $mens['data_entrada'];?></td>
-                                    <td><?= $mens['data_saida'];?></td>
-                                    
-                                    <td><?php  $dataSaida=$mens['data_saida'];
-                                    if((($dataSaida != ""))){
-                                        $difHora = round((strtotime($mens['data_saida']) - strtotime($mens['data_entrada']))/3600, 1);
-                                        echo ("R$ ".$difHora*8);
-                                        
-                                    }else{
-                                    echo("");                                  
-                                     }
-                                    ?></td>                               
-                                   </tr>
-                                <?php } ?> 
+
+                                            <td><?= $mens['data_entrada']; ?></td>
+                                            <td><?= $mens['data_saida']; ?></td>
+
+                                            <td><?php $dataSaida = $mens['data_saida'];
+                                                if ((($dataSaida != ""))) {
+                                                    $difHora = round((strtotime($mens['data_saida']) - strtotime($mens['data_entrada'])) / 3600, 1);
+                                                    echo ("R$ " . $difHora * 8);
+                                                } else {
+                                                    echo ("");
+                                                }
+                                                ?></td>
+
+                                        </tr>
+                                    <?php } ?>
                                 </tbody>
-
                             </table>
+                            <!-- Listar dia -->
+                            <table class="table" id="ListarDia">
+                                <thead>
+                                    <tr class="table-dark">
+                                        <th scope="col">Ticket</th>
+                                        <th scope="col">Placa</th>
+                                        <th scope="col">Convênio</th>
+                                        <th scope="col">Entrada</th>
+                                        <th scope="col">Saída</th>
+                                        <th scope="col">Total</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <?php foreach ($list_dia as $mens) { ?>
+                                        <tr class="table-dark">
+                                            <th scope="row"><?= $mens['id']; ?></th>
+                                            <td><?= $mens['placa']; ?></td>
+                                            <td><?= $mens['convenio']; ?></td>
+
+
+                                            <td><?= $mens['data_entrada']; ?></td>
+                                            <td><?= $mens['data_saida']; ?></td>
+
+                                            <td><?php $dataSaida = $mens['data_saida'];
+                                                if ((($dataSaida != ""))) {
+                                                    $difHora = round((strtotime($mens['data_saida']) - strtotime($mens['data_entrada'])) / 3600, 1);
+                                                    echo ("R$ " . $difHora * 8);
+                                                } else {
+                                                    echo ("");
+                                                }
+                                                ?></td>
+
+                                        </tr>
+                                    <?php } ?>
+                                </tbody>
+                            </table>
+                            <!-- Listar mês -->
+                            <table class="table" id="ListarMes">
+                                <thead>
+                                    <tr class="table-dark">
+                                        <th scope="col">Ticket</th>
+                                        <th scope="col">Placa</th>
+                                        <th scope="col">Convênio</th>
+                                        <th scope="col">Entrada</th>
+                                        <th scope="col">Saída</th>
+                                        <th scope="col">Total</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <?php foreach ($list_mes as $mens) { ?>
+                                        <tr class="table-dark">
+                                            <th scope="row"><?= $mens['id']; ?></th>
+                                            <td><?= $mens['placa']; ?></td>
+                                            <td><?= $mens['convenio']; ?></td>
+
+
+                                            <td><?= $mens['data_entrada']; ?></td>
+                                            <td><?= $mens['data_saida']; ?></td>
+
+                                            <td><?php $dataSaida = $mens['data_saida'];
+                                                if ((($dataSaida != ""))) {
+                                                    $difHora = round((strtotime($mens['data_saida']) - strtotime($mens['data_entrada'])) / 3600, 1);
+                                                    echo ("R$ " . $difHora * 8);
+                                                } else {
+                                                    echo ("");
+                                                }
+                                                ?></td>
+
+                                        </tr>
+                                    <?php } ?>
+                                </tbody>
+                            </table>
+                            <!-- Listar ano -->
+                            <table class="table" id="ListarAno">
+                                <thead>
+                                    <tr class="table-dark">
+                                        <th scope="col">Ticket</th>
+                                        <th scope="col">Placa</th>
+                                        <th scope="col">Convênio</th>
+                                        <th scope="col">Entrada</th>
+                                        <th scope="col">Saída</th>
+                                        <th scope="col">Total</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <?php foreach ($list_ano as $mens) { ?>
+                                        <tr class="table-dark">
+                                            <th scope="row"><?= $mens['id']; ?></th>
+                                            <td><?= $mens['placa']; ?></td>
+                                            <td><?= $mens['convenio']; ?></td>
+
+
+                                            <td><?= $mens['data_entrada']; ?></td>
+                                            <td><?= $mens['data_saida']; ?></td>
+
+                                            <td><?php $dataSaida = $mens['data_saida'];
+                                                if ((($dataSaida != ""))) {
+                                                    $difHora = round((strtotime($mens['data_saida']) - strtotime($mens['data_entrada'])) / 3600, 1);
+                                                    echo ("R$ " . $difHora * 8);
+                                                } else {
+                                                    echo ("");
+                                                }
+                                                ?></td>
+
+                                        </tr>
+                                    <?php } ?>
+                                </tbody>
+                            </table>
+
                         </form>
                     </div>
                 </div>
-                  <!-- Diaria Avulsa -->
-                  <div id="avulso" class="col-md-9 col-sm-9 container-md m-2 p-3 border">
+                <!-- Diaria Avulsa -->
+                <div id="avulso" class="col-md-10 col-sm-10 container-md m-2 p-3 border">
                     <form class="row" action="">
                         <hr>
                         <h2 class="mb-4 fw-bolder">Diária Avulsa</h2>
-                        
+
                         <table class="table">
-                           
+
                             <thead>
                                 <tr class="table-dark">
                                     <th scope="col">Ticket</th>
@@ -396,41 +512,118 @@ $config = $c->Listar();
                                     <th scope="col">Observações</th>
                                     <th scope="col">Total a pagar</th>
                                     <th scope="col">Pagamento</th>
+                                    <th scope="col">Editar entrada</th>
+                                    <th scope="col">Registrar saída</th>
 
                                 </tr>
                             </thead>
-                          
+
                             <tbody>
-                            <?php foreach ($list_avulsos as $mens) { ?>
-                                <tr class="table-dark">
-                                    <th scope="row"><?= $mens['id'];?></th>
-                                    <td><?= $mens['placa'];?></td>
-                                    <td><?= $mens['data_entrada'];?></td>
-                                    <td><?= $mens['data_saida'];?></td>
-                                    <td><?= $mens['observacoes']; ?></td>
+                                <?php foreach ($list_avulsos as $mens) { ?>
+                                    <tr class="table-dark">
+                                        <th scope="row"><?= $mens['id']; ?></th>
+                                        <td><?= $mens['placa']; ?></td>
+                                        <td><?= $mens['data_entrada']; ?></td>
+                                        <td><?= $mens['data_saida']; ?></td>
+                                        <td><?= $mens['observacoes']; ?></td>
 
-                                    <td><?php  $dataSaida=$mens['data_saida'];
-                                    if((($dataSaida != ""))){
-                                        $difHora = round((strtotime($mens['data_saida']) - strtotime($mens['data_entrada']))/3600, 1);
-                                        echo ("R$ ".$difHora*8);
-                                        
-                                    }else{
-                                    echo("");                                  
-                                     }
-                                    ?></td>
+                                        <td><?php $dataSaida = $mens['data_saida'];
+                                            if ((($dataSaida != ""))) {
+                                                $difHora = round((strtotime($mens['data_saida']) - strtotime($mens['data_entrada'])) / 3600, 1);
+                                                echo ("R$ " . $difHora * 8);
+                                            } else {
+                                                echo ("");
+                                            }
+                                            ?></td>
 
-                                    <td><?php if(($mens['pago'] === 1)){
-                                        echo("Pago");
-                                    }else{
-                                        echo(" Pendente");
-                                    }
-                                    ?></td>
-                                </tr>
+                                        <td><?php if (($mens['pago'] === 1)) {
+                                                echo ("Pago");
+                                            } else {
+                                                echo (" Pendente");
+                                            }
+                                            ?></td>
+                                        <td><button type="button" class="btn btn-primary botao border" data-bs-toggle="modal" data-bs-target="#modalEditarAvulsos">Editar</button></td>
+                                        <td><button type="button" class="btn btn-primary botao border" data-bs-toggle="modal" data-bs-target="#modalRegistarSaida">Registrar</button></td>
+                                    </tr>
                                 <?php } ?>
-                                
                             </tbody>
-                            
                         </table>
+                        <!-- Modal Editar avulsos -->
+                        <div class="modal fade" id="modalEditarAvulsos" tabindex="-1" aria-labelledby="modalVagasLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5 text-black" id="modalVagasLabel">Editar entrada</h1>
+                                    </div>
+                                    <div class="modal-body">
+                                        <table class="table mt-3">
+                                            <tr>
+                                                <th scope="col">Placa</th>
+                                                <td> <input type="text" id="placa" name="placa"> </td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Tipo de veículo</th>
+                                                <td> <select class="form-select" aria-label="Default select example" id="id_tipo" name="id_tipo">
+                                                        <option selected>Selecione</option>
+                                                        <?php foreach ($tipos as $_listartipos) { ?>
+                                                            <option value="<?= $_listartipos['id']; ?>"><?= $_listartipos['tipo']; ?></option>
+                                                        <?php  } ?>
+                                                    </select></td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Possui avarias</th>
+                                                <td> <input type="text" id="avarias" name="avarias"> </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary f5821f" data-bs-dismiss="modal">Fechar</button>
+                                        <button type="submit" class="btn btn-primary botao border">Salvar mudanças</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Modal Registrar saída -->
+                        <div class="modal fade" id="modalRegistarSaida" tabindex="-1" aria-labelledby="modalVagasLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5 text-black" id="modalVagasLabel">Registrar saída</h1>
+                                    </div>
+                                    <div class="modal-body">
+                                        <table class="table mt-3">
+                                        <tr>
+                                            <tr>
+                                                <th scope="col">Ticket</th>
+                                                <td> <input type="text" id="ticket" name="ticket" readonly> </td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="col">Placa</th>
+                                                <td> <input type="text" id="placa" name="placa" readonly> </td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Tipo de veículo</th>
+                                                <td> <select class="form-select" aria-label="Default select example" id="id_tipo" name="id_tipo">
+                                                        <option selected>Selecione</option>
+                                                        <?php foreach ($tipos as $_listartipos) { ?>
+                                                            <option value="<?= $_listartipos['id']; ?>"><?= $_listartipos['tipo']; ?></option>
+                                                        <?php  } ?>
+                                                    </select></td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Possui avarias</th>
+                                                <td> <input type="text" id="avarias" name="avarias" readonly> </td>
+                                            </tr>
+                                                                                        
+                                        </table>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary f5821f" data-bs-dismiss="modal">Fechar</button>
+                                        <button type="submit" class="btn btn-primary botao border">Salvar mudanças</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </form>
                 </div>
 
@@ -464,7 +657,7 @@ $config = $c->Listar();
                                 </tr>
                             </thead>
 
-                            <tbody >
+                            <tbody>
                                 <?php foreach ($list_mensalistas as $mens) { ?>
                                     <tr class="table-dark">
                                         <th scope="row"><?= $mens['id']; ?></th>
@@ -504,7 +697,7 @@ $config = $c->Listar();
                                 </button>
                             </table>
                         </div>
-                        <!-- Modal -->
+                        <!-- Modal editar configuração -->
                         <div class="modal fade" id="modalVagas" tabindex="-1" aria-labelledby="modalVagasLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
@@ -662,7 +855,7 @@ $config = $c->Listar();
         $("#controleDeVagas").hide();
         $("#avulso").hide();
         //
-        
+
         // Alternar entre telas:
         $("#RegistroEntrada").click(function() {
             $("#painel").hide();
@@ -739,16 +932,38 @@ $config = $c->Listar();
 
         });
         //
-    function Listar() {
-    var checkBox = document.getElementById("todos");
-    // Se o checkbox estiver marcado
-    if (document.getElementById("todos").checked == true) {
-        $("#ListarTodos").fadeIn();
+        $("#ListarDia").hide();
+        $("#ListarMes").hide();
+        $("#ListarAno").hide();
+
+        function Listar() {
+
+            // Se o checkbox estiver marcado
+            if (document.getElementById("todos").checked == true) {
+                $("#ListarTodos").fadeIn();
             } else {
                 $("#ListarTodos").hide();
 
             }
-    }
+            if (document.getElementById("dia").checked == true) {
+                $("#ListarDia").fadeIn();
+            } else {
+                $("#ListarDia").hide();
+
+            }
+            if (document.getElementById("mes").checked == true) {
+                $("#ListarMes").fadeIn();
+            } else {
+                $("#ListarMes").hide();
+
+            }
+            if (document.getElementById("ano").checked == true) {
+                $("#ListarAno").fadeIn();
+            } else {
+                $("#ListarAno").hide();
+
+            }
+        }
 
         //teste RELATÓRIO FINANCEIRO
         const xArray = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
@@ -787,7 +1002,7 @@ $config = $c->Listar();
             }
         }
 
-         
+
 
         Plotly.newPlot("relatorio", data, layout);
     </script>
