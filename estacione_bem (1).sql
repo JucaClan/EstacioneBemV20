@@ -188,6 +188,7 @@ INSERT INTO `usuarios` (`id`, `nome`, `email`, `telefone`, `senha`, `foto`) VALU
 ALTER TABLE `configuracoes`
   ADD PRIMARY KEY (`id`);
 
+
 --
 -- Índices de tabela `estacionamento`
 --

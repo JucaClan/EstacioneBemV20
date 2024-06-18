@@ -37,6 +37,7 @@ $vagaslivres = $e->ObterVagasLivres();
 $list_mes = $e->ListarMesAtual();
 $list_dia = $e->ListarDiaAtual();
 $list_ano = $e->ListarAnoAtual();
+$listid = $e->ListarId();
 
 $c = new Configuracao();
 $config = $c->Listar();
@@ -184,7 +185,7 @@ $config = $c->Listar();
             <!-- PAINEL -->
             <div class="row m-4 justify-content-center">
                 <div id="painel" class="col-md-9 col-sm-9 m-3 border">
-                    <form class="m-3" action="">
+                    <div class="m-3">
                         <h2 class="mb-4 fw-bolder">Posição atual</h2>
                         <hr>
                         <p class="mb-4 fs-6 opacity-75">Status do estacionamento e versionamento</p>
@@ -211,7 +212,7 @@ $config = $c->Listar();
                                 <td>R$ 0,00</td>
                             </tr>
                         </table>
-                    </form>
+                    </div>
                 </div>
 
                 <!-- REGISTRO DE ENTRADA -->
@@ -272,7 +273,7 @@ $config = $c->Listar();
                 <!-- MOVIMENTAÇÕES -->
                 <div id="movimentacoes" class="row justify-content-center">
                     <div class="col-md-9 col-sm-9 container-md m-2 p-3 border">
-                        <form class="row" action="">
+                        <div class="row">
                             <hr>
                             <h2 class="mb-4 fw-bolder">Movimentações</h2>
                             <p class="mb-4 fs-6 opacity-75 "><span class="fw-bolder">Período</span>
@@ -318,11 +319,11 @@ $config = $c->Listar();
                                     <td>R$ 0,00</td>
                                 </tr>
                             </table>
-                        </form>
+                        </div>
                     </div>
                     <!-- HISTÓRICO DE MOVIMENTAÇÕES -->
                     <div class="col-md-9 col-sm-9 container-md m-2 p-3 border">
-                        <form class="row" action="">
+                        <div class="row">
                             <h2 class="mb-4 fw-bolder">Histórico Movimentações</h2>
                             <p class="mb-4 fs-6 opacity-75 "><span class="fw-bolder">Período</span>
                                 <br>
@@ -492,12 +493,12 @@ $config = $c->Listar();
                                 </tbody>
                             </table>
 
-                        </form>
+                        </div>
                     </div>
                 </div>
                 <!-- Diaria Avulsa -->
                 <div id="avulso" class="col-md-10 col-sm-10 container-md m-2 p-3 border">
-                    <form class="row" action="">
+                    <div class="row">
                         <hr>
                         <h2 class="mb-4 fw-bolder">Diária Avulsa</h2>
 
@@ -542,94 +543,60 @@ $config = $c->Listar();
                                                 echo (" Pendente");
                                             }
                                             ?></td>
-                                        <td><button type="button" class="btn btn-primary botao border" data-bs-toggle="modal" data-bs-target="#modalEditarAvulsos">Editar</button></td>
-                                        <td><button type="button" class="btn btn-primary botao border" data-bs-toggle="modal" data-bs-target="#modalRegistarSaida">Registrar</button></td>
+                                        <td><button type="button" class="btn btn-primary botao border" data-bs-toggle="modal" data-bs-target="#modalEditarAvulsos" data-bs-id="<?= $mens['id']; ?>" data-bs-placa="<?= $mens['placa']; ?>" data-bs-avarias="<?= $mens['observacoes']; ?>">Editar</button></td>
+                                        <td><a type="button" class="btn btn-primary botao border" href="actions/registrar_saida.php?id=<?= $mens['id'] ?>">Registrar</a></td>
+
                                     </tr>
                                 <?php } ?>
                             </tbody>
                         </table>
+
                         <!-- Modal Editar avulsos -->
-                        <div class="modal fade" id="modalEditarAvulsos" tabindex="-1" aria-labelledby="modalVagasLabel" aria-hidden="true">
+                        <div class="modal fade" id="modalEditarAvulsos" tabindex="-1" aria-labelledby="modalEditarAvulsosLabel" aria-hidden="true">
                             <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h1 class="modal-title fs-5 text-black" id="modalVagasLabel">Editar entrada</h1>
+                                <form action="actions/editar_veiculo.php" method="POST">
+                                    <div class="modal-content">
+                                        <div class="modal-header bg-dark text-light">
+                                            <h1 class="modal-title fs-5 text-light" id="modalEditarAvulsosLabel">Editar entrada</h1>
+                                        </div>
+
+                                        <div class="modal-body bg-dark text-light">
+                                            <table class="table mt-3 bg-dark text-light">
+                                                <tr class="bg-dark text-light">
+                                                    <th scope="col" class="bg-dark text-light">Placa</th>
+                                                    <td class="bg-dark text-light"> <input type="text" id="placa" name="placa"> </td>
+                                                </tr>
+                                                <tr class="bg-dark text-light">
+                                                    <th scope="row" class="bg-dark text-light">Tipo de veículo</th>
+                                                    <td class="bg-dark text-light"> <select class="form-select" aria-label="Default select example" id="id_tipo" name="id_tipo">
+                                                            <option selected>Selecione</option>
+                                                            <?php foreach ($tipos as $_listartipos) { ?>
+                                                                <option value="<?= $_listartipos['id']; ?>"><?= $_listartipos['tipo']; ?></option>
+                                                            <?php  } ?>
+                                                        </select></td>
+                                                </tr>
+                                                <tr class="bg-dark text-light">
+                                                    <th scope="row" class="bg-dark text-light">Possui avarias</th>
+                                                    <td class="bg-dark text-light"> <input type="text" id="avarias" name="avarias"> </td>
+                                                </tr>
+                                            </table>
+                                            <input type="hidden" id="carroid" name="carroid">
+                                        </div>
+                                        <div class="modal-footer bg-dark text-light">
+                                            <button type="button" class="btn btn-secondary f5821f" data-bs-dismiss="modal">Fechar</button>
+                                            <button type="submit" class="btn btn-primary botao border">Salvar mudanças</button>
+                                        </div>
+
                                     </div>
-                                    <div class="modal-body">
-                                        <table class="table mt-3">
-                                            <tr>
-                                                <th scope="col">Placa</th>
-                                                <td> <input type="text" id="placa" name="placa"> </td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">Tipo de veículo</th>
-                                                <td> <select class="form-select" aria-label="Default select example" id="id_tipo" name="id_tipo">
-                                                        <option selected>Selecione</option>
-                                                        <?php foreach ($tipos as $_listartipos) { ?>
-                                                            <option value="<?= $_listartipos['id']; ?>"><?= $_listartipos['tipo']; ?></option>
-                                                        <?php  } ?>
-                                                    </select></td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">Possui avarias</th>
-                                                <td> <input type="text" id="avarias" name="avarias"> </td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary f5821f" data-bs-dismiss="modal">Fechar</button>
-                                        <button type="submit" class="btn btn-primary botao border">Salvar mudanças</button>
-                                    </div>
-                                </div>
+                                </form>
                             </div>
                         </div>
-                        <!-- Modal Registrar saída -->
-                        <div class="modal fade" id="modalRegistarSaida" tabindex="-1" aria-labelledby="modalVagasLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h1 class="modal-title fs-5 text-black" id="modalVagasLabel">Registrar saída</h1>
-                                    </div>
-                                    <div class="modal-body">
-                                        <table class="table mt-3">
-                                        <tr>
-                                            <tr>
-                                                <th scope="col">Ticket</th>
-                                                <td> <input type="text" id="ticket" name="ticket" readonly> </td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="col">Placa</th>
-                                                <td> <input type="text" id="placa" name="placa" readonly> </td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">Tipo de veículo</th>
-                                                <td> <select class="form-select" aria-label="Default select example" id="id_tipo" name="id_tipo">
-                                                        <option selected>Selecione</option>
-                                                        <?php foreach ($tipos as $_listartipos) { ?>
-                                                            <option value="<?= $_listartipos['id']; ?>"><?= $_listartipos['tipo']; ?></option>
-                                                        <?php  } ?>
-                                                    </select></td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">Possui avarias</th>
-                                                <td> <input type="text" id="avarias" name="avarias" readonly> </td>
-                                            </tr>
-                                                                                        
-                                        </table>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary f5821f" data-bs-dismiss="modal">Fechar</button>
-                                        <button type="submit" class="btn btn-primary botao border">Salvar mudanças</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
+                    </div>
                 </div>
 
                 <!-- Mensalistas -->
                 <div id="mensalistas" class="col-md-9 col-sm-9 col-xs-9 container-md m-2 p-3 border">
-                    <form class="row" action="">
+                    <div class="row">
                         <hr>
                         <h2 class="mb-4 fw-bolder">Mensalistas</h2>
                         <p class="mb-4 fs-6 opacity-75 fw-bold "><span class="fw-bolder">Situação</span>
@@ -676,11 +643,10 @@ $config = $c->Listar();
                             </tbody>
 
                         </table>
-                    </form>
+                    </div>
                 </div>
-
-                        <!-- CONFIGURAÇÕES -->
-                        <div id="controleDeVagas" class="row justify-content-center">
+                <!-- CONFIGURAÇÕES -->
+                <div id="controleDeVagas" class="row justify-content-center">
                     <div class="col-md-6 container-md m-2 p-3">
                         <div class="card bg-dark text-light border-white p-4">
                             <h2 class="mt-3 negrito">Configurações<br> </h2>
@@ -1060,6 +1026,20 @@ $config = $c->Listar();
 
 
         Plotly.newPlot("relatorio", data, layout);
+
+
+        const modalEditarAvulsos = document.getElementById('modalEditarAvulsos')
+        if (modalEditarAvulsos) {
+            modalEditarAvulsos.addEventListener('show.bs.modal', event => {
+                // Button that triggered the modal
+                const button = event.relatedTarget
+
+                // Update the modal's content.
+                modalEditarAvulsos.querySelector('#carroid').value = button.getAttribute('data-bs-id')
+                modalEditarAvulsos.querySelector('#placa').value = button.getAttribute('data-bs-placa')
+                modalEditarAvulsos.querySelector('#avarias').value = button.getAttribute('data-bs-avarias')
+            })
+        }
     </script>
 
     <?php
