@@ -708,7 +708,7 @@ $config = $c->Listar();
                                 <?php foreach ($listserv as $servicos) { ?>
                                     <tr class="table-dark">
                                         <td class="negrito"><?= $servicos['servico']; ?></td>
-                                        <td><?= $servicos['valor']; ?></td>
+                                        <td> R$ <?= $servicos['valor']; ?></td>
                                     </tr>
                                 <?php } ?>
                                 <button type="button" class="btn btn-primary botao border" data-bs-toggle="modal" data-bs-target="#modalTabelaPrecos">
@@ -724,7 +724,7 @@ $config = $c->Listar();
                                     <div class="modal-header">
                                         <h1 class="modal-title fs-5 text-light" id="modalVagasLabel">Editar Preços</h1>
                                     </div>
-                                    <form action="actions/editar_valor.php" method="POST">
+                                    <form enctype="multipart/form-data" action="actions/editar_valor.php" method="POST">
                                         <div class="modal-body bg-dark text-light">
                                             <table class="table mt-3">
                                                 <tr class="bg-dark text-light">
