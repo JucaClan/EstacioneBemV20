@@ -18,14 +18,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header('Location: ../index.php');
         die();
     }
-    
-    if ($serv->Editar() > 0) {
-        header('Location: ../index.php?sucesso=editarvalor');
-        die();
-    } else {
-        header('Location: ../index.php?falha=editarvalor');
-        die();
-    }
+   
+     if ($serv->Editar() > 0) {
+          header('Location: ../index.php?sucesso=editarvalor');
+         die();
+     } else {
+          header('Location: ../index.php?falha=editarvalor');
+          die();
+     }
 } else {
     echo "Erro. A página deve ser carregada por POST.";
 }

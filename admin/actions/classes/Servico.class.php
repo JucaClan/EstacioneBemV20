@@ -32,7 +32,7 @@ class Servico{
         $sql2 = "UPDATE servicos SET valor=? WHERE id=2";
         $banco = Banco::conectar();
         $comando = $banco->prepare($sql);
-        try {
+         try {
             $comando->execute([$this->valor[0]]);
             $cont += $comando->rowCount();
             $comando = $banco->prepare($sql2);
@@ -40,10 +40,11 @@ class Servico{
             $cont += $comando->rowCount();
             Banco::desconectar();
             return $cont;
-        } catch (PDOException $e) {
+         } catch (PDOException $e) {
             Banco::desconectar();
-            return $cont;
-        }
+             return $cont;
+    
+            }
     }
 }
 
